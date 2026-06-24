@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sàn Đặt Tour Du Lịch Uy Tín - VietnamTravel</title>
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6; color: #333;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 50px; background: #2c3e50; color: white;
+        }
+        .logo h1 { font-size: 24px; font-weight: 700; text-transform: uppercase; color: white;}
+        .logo span { color: #ff4757; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 500; }
+        .nav-links a.active { color: #ff4757; }
+
+        /* --- BANNER BẢO ĐẢM --- */
+        .guarantee-banner {
+            background: #fff3f3; border-bottom: 1px solid #ffcccb;
+            padding: 15px 50px; display: flex; align-items: center; gap: 15px;
+            color: #d63031; font-weight: 600; font-size: 14px;
+        }
+        .shield-icon { font-size: 24px; }
+
+        /* --- THANH ĐIỀU HƯỚNG CỦA SÀN (SEARCH & ĐĂNG TOUR) --- */
+        .market-action-bar {
+            max-width: 1200px; margin: 30px auto 0 auto; width: 100%; padding: 0 50px;
+            display: flex; justify-content: space-between; gap: 20px; align-items: center;
+            flex-wrap: wrap;
+        }
+        .filter-group { display: flex; gap: 15px; flex-grow: 1; max-width: 70%; }
+        .search-input {
+            flex-grow: 1; padding: 12px 20px; border: 1px solid #ddd;
+            border-radius: 8px; outline: none; font-size: 14px; background: white;
+        }
+        .search-input:focus { border-color: #ff4757; }
+        .filter-select {
+            padding: 12px 20px; border: 1px solid #ddd; background: white;
+            border-radius: 8px; outline: none; font-size: 14px; cursor: pointer;
+        }
+
+        /* Nút dành cho Doanh nghiệp tự đăng ký bán Tour */
+        .btn-vendor-register {
+            background: #2196f3; color: white; border: none; padding: 12px 20px;
+            border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px;
+            transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-vendor-register:hover { background: #1e88e5; transform: translateY(-2px); }
+
+        /* --- DANH SÁCH TOUR --- */
+        .container { padding: 30px 50px 60px 50px; max-width: 1200px; margin: 0 auto; width: 100%; }
+        .section-title { margin-bottom: 25px; color: #2c3e50; font-size: 22px; display: flex; justify-content: space-between; }
+        .tour-count { font-size: 14px; color: #7f8c8d; font-weight: normal; align-self: flex-end; }
+        
+        .tour-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
+
+        /* Card thiết kế theo phong cách Sàn TMĐT mở */
+        .tour-card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column;
+            transition: transform 0.3s; position: relative; border: 1px solid #eef2f5;
+        }
+        .tour-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+        /* Badge định danh đối tác độc lập của sàn */
+        .badge-vendor-type {
+            position: absolute; top: 12px; left: 12px; background: rgba(0, 0, 0, 0.75); color: #fff; 
+            padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; z-index: 2;
+            backdrop-filter: blur(4px);
+        }
+
+        .tour-img { width: 100%; height: 200px; object-fit: cover; }
+        
+        /* Thông tin công ty lữ hành tự đăng */
+        .vendor-profile-box {
+            display: flex; align-items: center; gap: 8px; padding: 15px 20px 5px 20px;
+        }
+        .vendor-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #eee; }
+        .tour-company { font-size: 13px; color: #2c3e50; font-weight: 700; }
+
+        .tour-info { padding: 0 20px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+        .tour-name { font-size: 15px; color: #333; font-weight: 700; line-height: 1.4; min-height: 42px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .tour-rating { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #f1c40f; font-weight: bold; }
+        .rating-count { color: #95a5a6; font-weight: normal; }
+
+        .btn-plan-detail {
+            background: #fff; color: #ff4757; border: 1px solid #ff4757; padding: 8px;
+            border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; text-align: center;
+            transition: 0.2s;
+        }
+        .btn-plan-detail:hover { background: #fff5f5; }
+
+        .tour-price-box { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; border-top: 1px dashed #eee; }
+        .tour-price { font-size: 18px; color: #ff4757; font-weight: 700; }
+        .btn-book { background: #ff4757; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .btn-book:hover { background: #ee3848; }
+
+        /* --- POPUP MODAL THỜI TRANG & TRỰC QUAN (RỘNG HƠN) --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 100;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 16px; width: 750px; max-height: 90vh;
+            display: flex; flex-direction: column; gap: 20px; position: relative; overflow-y: auto;
+        }
+        .modal-title { font-size: 18px; font-weight: 700; color: #2c3e50; line-height: 1.4; padding-right: 30px; }
+        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 26px; cursor: pointer; color: #aaa; transition: 0.2s; }
+        .close-btn:hover { color: #333; }
+
+        /* Thiết kế Grid Lịch trình trực quan có hình ảnh */
+        .itinerary-section-title { font-size: 15px; font-weight: 700; color: #2c3e50; background: #e8f4fd; padding: 8px 12px; border-radius: 6px; margin-top: 5px;}
+        
+        .plan-visual-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 10px;
+        }
+        .plan-step-card {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
+        }
+        .plan-step-img { width: 100%; height: 120px; object-fit: cover; }
+        .plan-step-info { padding: 12px; flex-grow: 1; }
+        .plan-step-label { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+        
+        /* Color màu sắc riêng cho từng nội dung */
+        .lbl-loc { background: #e0f2fe; color: #0369a1; }
+        .lbl-hotel { background: #fef3c7; color: #b45309; }
+        .lbl-food { background: #dcfce7; color: #15803d; }
+        .lbl-act { background: #f3e8ff; color: #6b21a8; }
+        
+        .plan-step-text { font-size: 13px; color: #334155; line-height: 1.4; font-weight: 500; }
+
+        /* Form đặt vé bên dưới */
+        .order-section-title { font-size: 15px; font-weight: 700; color: #2c3e50; border-top: 1px solid #e2e8f0; padding-top: 15px; }
+        .form-row { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; }
+        .modal-group { display: flex; flex-direction: column; gap: 6px; }
+        .modal-group label { font-size: 12px; font-weight: 600; color: #475569; }
+        .modal-group input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none; font-size: 13px; }
+        .modal-group input:focus { border-color: #ff4757; }
+        
+        .total-box { background: #fff3f3; padding: 12px; border-radius: 6px; color: #ff4757; font-weight: 700; text-align: right; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-confirm { background: #2ed573; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
+        .btn-confirm:hover { background: #26af5f; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo"><h1>Vietnam<span>Travel</span></h1></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Trang Chủ</a></li>
+            <li><a href="gourmet-tips.html">Ẩm Thực & Mẹo</a></li>
+            <li><a href="#" class="active">Chợ Tour Bảo Đảm</a></li>
+        </ul>
+    </nav>
+
+    <!-- BANNER BẢO ĐẢM KÝ QUỸ -->
+    <div class="guarantee-banner">
+        <span class="shield-icon">🛡️</span>
+        <div>
+            <strong>VietnamTravel Đảm Bảo (Open Market):</strong> Sàn giao dịch mở công khai. Tất cả các công ty lữ hành đều đã được xác minh giấy phép kinh doanh. Dòng tiền thanh toán của bạn được hệ thống giữ an toàn cho đến khi kết thúc hành trình.
+        </div>
+    </div>
+
+    <!-- THANH HÀNH ĐỘNG: TÌM KIẾM & ĐĂNG KÝ MỞ GIAN HÀNG -->
+    <div class="market-action-bar">
+        <div class="filter-group">
+            <input type="text" id="searchBar" class="search-input" onkeyup="filterTours()" placeholder="🔍 登録企業名 hay tên điểm đến để tìm kiếm...">
+            <select id="priceFilter" class="filter-select" onchange="filterTours()">
+                <option value="all">すべての価格 (Tất cả giá)</option>
+                <option value="low">2,000,000 VND 以下</option>
+                <option value="high">2,000,000 VND 以上</option>
+            </select>
+        </div>
+        <!-- Thể hiện tính chất chợ mở tự do kinh doanh -->
+        <button class="btn-vendor-register" onclick="alert('【旅行会社様へ】\nĐăng ký tài khoản doanh nghiệp trực tuyến.\nHệ thống phê duyệt tự động bằng eKYC giấy phép lữ hành trong 5 phút!')">
+            🏪 出店を希望する (Đăng ký mở gian hàng bán Tour)
+        </button>
+    </div>
+
+    <!-- SÀN THƯƠNG MẠI ĐIỆN TỬ TOUR -->
+    <div class="container">
+        <h2 class="section-title">
+            マーケットプレイス (Chợ Tour Tự Do Đăng Tải)
+            <span class="tour-count" id="visibleCount">Hiển thị: 2 tour được bên thứ 3 phân phối</span>
+        </h2>
+        
+        <div class="tour-grid" id="tourGrid">
+            
+            <!-- TOUR 1: DO HANOI TOURIST ĐĂNG -->
+            <div class="tour-card" data-price="3500000">
+                <span class="badge-vendor-type">Corporate Partner</span>
+                <img class="tour-img" src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=600" alt="Hà Giang">
+                
+                <!-- Profile đơn vị tự đăng ký phân phối -->
+                <div class="vendor-profile-box">
+                    <img class="vendor-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100" alt="Avatar">
+                    <span class="tour-company">Hanoi Tourist Corp (Đã xác minh)</span>
+                </div>
+
+                <div class="tour-info">
+                    <div class="tour-name">【3泊2日】ハザン大自然冒険ツアー（バイク旅・ホームステイ体験）</div>
+                    <div class="tour-rating">⭐ 4.9 <span class="rating-count">(120)</span></div>
+                    
+                    <button class="btn-plan-detail" onclick="openModal('t1')">📋 プラン細部 & 写真を見る (Xem Plan & Ảnh minh họa)</button>
+                    
+                    <div class="tour-price-box">
+                        <span class="tour-price">3,500,000 VND</span>
+                        <button class="btn-book" onclick="openModal('t1')">予約する</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOUR 2: DO SAIGON TRAVEL ĐĂNG -->
+            <div class="tour-card" data-price="1250000">
+                <span class="badge-vendor-type">Local Guide Provider</span>
+                <img class="tour-img" src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=600" alt="Đà Nẵng">
+                
+                <!-- Profile đơn vị tự đăng ký phân phối -->
+                <div class="vendor-profile-box">
+                    <img class="vendor-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100" alt="Avatar">
+                    <span class="tour-company">SaigonTravel Agency</span>
+                </div>
+
+                <div class="tour-info">
+                    <div class="tour-name">【日帰り】ダナン・バナヒルズ満喫ツアー（ゴールデンブリッジ）</div>
+                    <div class="tour-rating">⭐ 4.7 <span class="rating-count">(85)</span></div>
+                    
+                    <button class="btn-plan-detail" onclick="openModal('t2')">📋 プラン細部 & 写真を見る (Xem Plan & Ảnh minh họa)</button>
+                    
+                    <div class="tour-price-box">
+                        <span class="tour-price">1,250,000 VND</span>
+                        <button class="btn-book" onclick="openModal('t2')">予約する</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- POPUP XEM CHI TIẾT PLAN TRỰC QUAN + ĐẶT TOUR -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-title" id="modalTourName">Tên Tour</div>
+            
+            <div class="itinerary-section-title">🗺️ ツアー行程・詳細プラン (Lịch trình thực tế chi tiết)</div>
+            
+            <!-- GRID 4 KHỐI ĐỊA ĐIỂM - NƠI Ở - ĂN UỐNG - VĂN HÓA CÓ ẢNH MINH HỌA -->
+            <div class="plan-visual-grid">
+                
+                <!-- 1. ĐỊA ĐIỂM -->
+                <div class="plan-step-card">
+                    <img id="img-loc" class="plan-step-img" src="" alt="Location">
+                    <div class="plan-step-info">
+                        <span class="plan-step-label lbl-loc">📍 観光地 (Điểm đến)</span>
+                        <div id="txt-loc" class="plan-step-text"></div>
+                    </div>
+                </div>
+
+                <!-- 2. NƠI Ở -->
+                <div class="plan-step-card">
+                    <img id="img-hotel" class="plan-step-img" src="" alt="Hotel">
+                    <div class="plan-step-info">
+                        <span class="plan-step-label lbl-hotel">🏨 宿泊 (Nơi ở)</span>
+                        <div id="txt-hotel" class="plan-step-text"></div>
+                    </div>
+                </div>
+
+                <!-- 3. ĂN UỐNG -->
+                <div class="plan-step-card">
+                    <img id="img-food" class="plan-step-img" src="" alt="Food">
+                    <div class="plan-step-info">
+                        <span class="plan-step-label lbl-food">🍽️ グルメ (Ăn uống)</span>
+                        <div id="txt-food" class="plan-step-text"></div>
+                    </div>
+                </div>
+
+                <!-- 4. HOẠT ĐỘNG VĂN HÓA -->
+                <div class="plan-step-card">
+                    <img id="img-act" class="plan-step-img" src="" alt="Activity">
+                    <div class="plan-step-info">
+                        <span class="plan-step-label lbl-act">🎭 文化体験 (Văn hóa)</span>
+                        <div id="txt-act" class="plan-step-text"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="order-section-title">✍️ 予約手続き (Thông tin đặt chỗ)</div>
+
+            <!-- FORM ĐẶT VÉ -->
+            <div class="form-row">
+                <div class="modal-group">
+                    <label>参加者氏名 (Tên khách hàng):</label>
+                    <input type="text" id="customerName" placeholder="Ví dụ: Nguyen Van A">
+                </div>
+                <div class="modal-group">
+                    <label>人数 (Số người):</label>
+                    <input type="number" id="ticketCount" value="1" min="1" onchange="calculateTotal()">
+                </div>
+            </div>
+
+            <div class="total-box">
+                <span>🛡️ Escrow Bảo Đảm Hệ Thống</span>
+                <div>合計: <span id="totalPrice">0</span> VND</div>
+            </div>
+            
+            <button class="btn-confirm" onclick="confirmOrder()">🔒 同意して安全決済へ進む (Đồng ý & Thanh toán an toàn)</button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT ĐIỀU PHỐI DỮ LIỆU ĐỘNG VÀ HÌNH ẢNH MINH HỌA -->
+    <script>
+        // KHO DỮ LIỆU CHỨA NỘI DUNG VÀ LINK ẢNH MINH HỌA KHÁC NHAU CHO TỪNG PLAN
+        const tourPlans = {
+            "t1": {
+                name: "【3泊2日】ハザン大自然冒険ツアー（バイク旅・ホームステイ体験）",
+                price: 3500000,
+                // Ảnh + nội dung Điểm đến
+                imgLoc: "https://images.unsplash.com/photo-1605538032432-a9f0c8d9baac?q=80&w=400",
+                txtLoc: "ハザン省のドンヴァンカルスト台地や、大迫力のマピレン峠を巡ります。",
+                // Ảnh + nội dung Nơi ở
+                imgHotel: "https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=400",
+                txtHotel: "高床式の伝統的なホームステイに宿泊し、現地の人々の温かさに触れます。",
+                // Ảnh + nội dung Ăn uống
+                imgFood: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=400",
+                txtFood: "五色おこわや地元の伝統料理「トウモロコシ酒」を存分に堪能します。",
+                // Ảnh + nội dung Văn hóa
+                imgAct: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=400",
+                txtAct: "伝統的な少数民族の衣装を着て、賑やかな山岳日曜市場を体験します。"
+            },
+            "t2": {
+                name: "【日帰り】ダナン・バナヒルズ満喫ツアー（ゴールデンブリッジ）",
+                price: 1250000,
+                // Ảnh + nội dung Điểm đến
+                imgLoc: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=400",
+                txtLoc: "SNSで大人気の中部ダナンの絶景スポット、神の手・ゴールデンブリッジへご案内。",
+                // Ảnh + nội dung Nơi ở
+                imgHotel: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=400",
+                txtHotel: "日帰りプランのためホテル宿泊は含まれません（車内エアコン完備）。",
+                // Ảnh + nội dung Ăn uống
+                imgFood: "https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400",
+                txtFood: "バナヒルズ山頂にある高級レストランで、100種類以上のビュッフェを堪能。",
+                // Ảnh + nội dung Văn hóa
+                imgAct: "https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=400",
+                txtAct: "世界最長級のロープウェイに乗り、ヨーロッパ風の街並みでカーニバルを観賞。"
+            }
+        };
+
+        let currentPrice = 0;
+
+        // Hàm đổ dữ liệu Plan gồm Text và Link Ảnh động vào Modal khi nhấn nút
+        function openModal(tourId) {
+            const data = tourPlans[tourId];
+            if (!data) return;
+
+            // Nạp tiêu đề và giá
+            document.getElementById('modalTourName').innerText = data.name;
+            currentPrice = data.price;
+            document.getElementById('ticketCount').value = 1;
+            calculateTotal();
+
+            // Nạp Text chi tiết
+            document.getElementById('txt-loc').innerText = data.txtLoc;
+            document.getElementById('txt-hotel').innerText = data.txtHotel;
+            document.getElementById('txt-food').innerText = data.txtFood;
+            document.getElementById('txt-act').innerText = data.txtAct;
+
+            // Nạp Ảnh minh họa động
+            document.getElementById('img-loc').src = data.imgLoc;
+            document.getElementById('img-hotel').src = data.imgHotel;
+            document.getElementById('img-food').src = data.imgFood;
+            document.getElementById('img-act').src = data.imgAct;
+
+            // Hiển thị Pop-up
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        function calculateTotal() {
+            const count = parseInt(document.getElementById('ticketCount').value) || 1;
+            const total = currentPrice * count;
+            document.getElementById('totalPrice').innerText = total.toLocaleString('en-US');
+        }
+
+        function confirmOrder() {
+            const name = document.getElementById('customerName').value.trim();
+            if(!name) {
+                alert('お名前を入力してください。(Vui lòng nhập tên để hoàn tất!)');
+                return;
+            }
+            alert(`【VietnamTravel 🛡️ Khởi Tạo Giao Dịch Ký Quỹ】\n\nChúc mừng khách hàng: ${name}!\nYêu cầu của bạn đã được chuyển tới Công ty quản lý tour.\nSố tiền thanh toán tạm thời được đóng băng bảo đảm trên hệ thống sàn thành công!`);
+            closeModal();
+            document.getElementById('customerName').value = '';
+        }
+
+        function filterTours() {
+            const searchText = document.getElementById('searchBar').value.toLowerCase();
+            const priceFilter = document.getElementById('priceFilter').value;
+            const cards = document.querySelectorAll('.tour-card');
+            let visibleCount = 0;
+
+            cards.forEach((card, index) => {
+                const tourId = "t" + (index + 1);
+                const data = tourPlans[tourId];
+                if(!data) return;
+
+                let matchText = data.name.toLowerCase().includes(searchText) || data.txtLoc.toLowerCase().includes(searchText);
+                let matchPrice = true;
+
+                if (priceFilter === 'low') matchPrice = (data.price <= 2000000);
+                if (priceFilter === 'high') matchPrice = (data.price > 2000000);
+
+                if (matchText && matchPrice) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            document.getElementById('visibleCount').innerText = `Hiển thị: ${visibleCount} tour được bên thứ 3 phân phối`;
+        }
+    </script>
+</body>
+</html>

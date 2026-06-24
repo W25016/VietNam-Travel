@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet & Travel Tips - VietnamTravel</title>
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- NAVBAR (Đồng bộ toàn hệ thống) --- */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 50px; background: #2c3e50; color: white;
+        }
+        .logo h1 { font-size: 24px; font-weight: 700; text-transform: uppercase; color: white; }
+        .logo span { color: #ff4757; }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 500; }
+        .nav-links a.active { color: #ff4757; }
+
+        /* --- CẤU TRÚC PHẦN TABS CHUYỂN ĐỔI --- */
+        .tab-container {
+            display: flex; justify-content: center; gap: 20px; margin: 40px 0 20px 0;
+        }
+        .tab-btn {
+            padding: 12px 30px; font-size: 16px; font-weight: 600;
+            border: none; background: #e0e0e0; color: #555;
+            border-radius: 30px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .tab-btn:hover { background: #d5d5d5; }
+        .tab-btn.active {
+            background: #ff4757; color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        /* --- KHU VỰC NỘI DUNG --- */
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 20px 50px 50px 50px; width: 100%;
+        }
+        .content-section {
+            display: none; /* Ẩn mặc định, dùng JS để hiển thị */
+            animation: fadeIn 0.5s ease;
+        }
+        .content-section.active { display: block; }
+
+        /* Lưới hiển thị danh sách dạng Card */
+        .card-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;
+        }
+
+        .card {
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column;
+        }
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+        
+        .card-tag {
+            align-self: flex-start; padding: 4px 10px; font-size: 11px; font-weight: 700;
+            color: white; border-radius: 4px; text-transform: uppercase;
+        }
+        .tag-gourmet { background: #ff9f43; }
+        .tag-tips { background: #0abde3; }
+
+        .card-title-jp { font-size: 18px; color: #2c3e50; font-weight: 700; }
+        .card-title-vn { font-size: 13px; color: #ff4757; font-weight: 600; margin-top: -8px; }
+        .card-desc { font-size: 14px; color: #666; line-height: 1.6; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo"><h1>Vietnam<span>Travel</span></h1></div>
+        <ul class="nav-links">
+            <li><a href="index.html">Trang Chủ</a></li>
+            <li><a href="#" class="active">Ẩm Thực & Mẹo</a></li>
+            <li><a href="share.html">Cộng Đồng</a></li>
+            <li><a href="tours.html">Chợ Tour</a></li>
+        </ul>
+    </nav>
+
+    <!-- THANH BẤM CHUYỂN TAB -->
+    <div class="tab-container">
+        <button class="tab-btn active" onclick="switchTab('gourmet-tab', this)">ベトナムグルメ (Ẩm thực)</button>
+        <button class="tab-btn" onclick="switchTab('tips-tab', this)">旅の知恵・Tips (Kinh nghiệm)</button>
+    </div>
+
+    <!-- NỘI DUNG CHÍNH -->
+    <div class="container">
+
+        <!-- TAB 1: ẨM THỰC (ĐANG HIỂN THỊ) -->
+        <div id="gourmet-tab" class="content-section active">
+            <div class="card-grid">
+                
+                <!-- MÓN 1: PHỞ -->
+                <div class="card">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?q=80&w=600" alt="Pho">
+                    <div class="card-body">
+                        <span class="card-tag tag-gourmet">Gourmet</span>
+                        <div class="card-title-jp">伝統の味 フォー</div>
+                        <div class="card-title-vn">Phở truyền thống</div>
+                        <div class="card-desc">ベトナム料理の代名詞。牛や鶏の旨味が凝縮された透明なスープと、つるっとした米粉の麺（フォー）の相性が抜群です。朝食の定番ですが、一日中いつでも楽しめます。</div>
+                    </div>
+                </div>
+
+                <!-- MÓN 2: BÁNH MÌ -->
+                <div class="card">
+                    <img class="card-img" src="image/vietnamese-sandwich-pork-pickled-vegetables-600nw-2708960975.webp">
+                    <div class="card-body">
+                        <span class="card-tag tag-gourmet">Gourmet</span>
+                        <div class="card-title-jp">ベトナム風サンドイッチ バインミー</div>
+                        <div class="card-title-vn">Bánh mì kẹp Việt Nam</div>
+                        <div class="card-desc">世界中で愛される一品。サクサクのフランスパンに、レバーペースト、お肉、そして甘酸っぱい紅白なますやパクチーを挟んだ、食感も楽しい一品です。</div>
+                    </div>
+                </div>
+
+                <!-- MÓN 3: CÀ PHÊ TRỨNG -->
+                <div class="card">
+                    <img class="card-img" src="image/cach-lam-ca-phe-trung-bang-may-xay-sinh-to-thom-ngon-don-gian-thumb-620x620.jpg" alt="Egg Coffee">
+                    <div class="card-body">
+                        <span class="card-tag tag-gourmet">Gourmet</span>
+                        <div class="card-title-jp">エッグコーヒー</div>
+                        <div class="card-title-vn">Cà phê trứng Hà Nội</div>
+                        <div class="card-desc">ハノイ発祥のユニークな珈琲。濃厚なブラックコーヒーの上に、卵黄とコンデンスミルクをホイップしたクリーミーな泡をのせた、まるでプリンのような味わいです。</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: KINH NGHIỆM (ẨN) -->
+        <div id="tips-tab" class="content-section">
+            <div class="card-grid">
+                
+                <!-- MẸO 1: ĐI LẠI -->
+                <div class="card">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=600" alt="Grab/Traffic">
+                    <div class="card-body">
+                        <span class="card-tag tag-tips">Travel Tips</span>
+                        <div class="card-title-jp">安全な移動手段（Grabアプリ）</div>
+                        <div class="card-title-vn">Phương tiện di chuyển an toàn</div>
+                        <div class="card-desc">ベトナム国内の移動は、配車アプリ「Grab」が非常に便利で安全です。ぼったくりの心配がなく、事前に料金がわかるので観光客にとって必須のアプリです。</div>
+                    </div>
+                </div>
+
+                <!-- MẸO 2: THỜI TIẾT -->
+                <div class="card">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=600" alt="Weather">
+                    <div class="card-body">
+                        <span class="card-tag tag-tips">Travel Tips</span>
+                        <div class="card-title-jp">気候と服装の注意点</div>
+                        <div class="card-title-vn">Lưu ý về thời tiết và trang phục</div>
+                        <div class="card-desc">ベトナムは南北で気候が大きく異なります。ハノイ（北部）には冬（12月〜2月）があり肌寒いですが、ホーチミン（南部）は一年中常夏なので、地域に合わせた服装選びが大切です。</div>
+                    </div>
+                </div>
+
+                <!-- MẸO 3: ĐỔI TIỀN -->
+                <div class="card">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1580519542036-c47de6196ba5?q=80&w=600" alt="Money">
+                    <div class="card-body">
+                        <span class="card-tag tag-tips">Travel Tips</span>
+                        <div class="card-title-jp">両替と通貨について</div>
+                        <div class="card-title-vn">Kinh nghiệm đổi tiền và tiền tệ</div>
+                        <div class="card-desc">ベトナムの通貨は「ドン(VND)」です。日本で両替するよりも、ベトナムの空港や市内の銀行、金閣店で両替する方がレートが良いことが多いです。常に少しの現金を持っておくと便利です。</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT XỬ LÝ CHUYỂN TAB ĐỘNG -->
+    <script>
+        function switchTab(tabId, button) {
+            // 1. Ẩn tất cả các khu vực nội dung đi
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            // 2. Gỡ bỏ trạng thái sáng (active) của tất cả các nút bấm
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // 3. Hiển thị đúng khu vực được bấm và làm sáng nút đó lên
+            document.getElementById(tabId).classList.add('active');
+            button.classList.add('active');
+        }
+    </script>
+</body>
+</html>

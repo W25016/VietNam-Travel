@@ -1,0 +1,42 @@
+/* --- GLOBAL NAVBAR STYLE --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background: #2c3e50; /* Màu xanh thẫm sang trọng */
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 999; /* Luôn nổi lên trên cùng khi cuộn trang */
+}
+.logo h1 {
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+}
+.logo span {
+    color: #ff4757; /* Màu đỏ tạo điểm nhấn thương hiệu */
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+/* Hiệu ứng hover và đánh dấu trang đang active */
+.nav-links a:hover, .nav-links a.active {
+    background: #ff4757;
+    color: white;
+}

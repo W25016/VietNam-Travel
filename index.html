@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cẩm Nang Du Lịch Việt Nam 12 Tháng</title>
+    <style>
+        /* --- RESET & STYLE CƠ BẢN --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f7f6;
+        }
+
+        /* --- LỚP NỀN TOÀN MÀN HÌNH --- */
+        .hero-section {
+            width: 100%;
+            height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), 
+                              url('https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1920'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- THANH MENU TRÊN CÙNG (NAVBAR) --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }
+
+        .logo h1 {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .logo span { color: #ff4757; }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        /* Hiệu ứng khi di chuột qua hoặc trang đang mở */
+        .nav-links a:hover, .nav-links a.active { 
+            color: #ffffff; 
+            background: #ff4757;
+        }
+
+        /* --- KHU VỰC NỘI DUNG CHÍNH (CHIA THÀNH 2 CỘT DỌC) --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            padding: 30px 50px;
+            gap: 30px;
+            align-items: stretch;
+            height: calc(100vh - 75px);
+        }
+
+        /* CỘT TRÁI: DANH SÁCH 12 THÁNG (Chiếm 25% chiều rộng) */
+        .months-sidebar {
+            width: 25%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột nút bấm nhỏ gọn */
+            gap: 12px;
+            align-content: start;
+            overflow-y: auto;
+        }
+
+        .month-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .month-btn span {
+            display: block;
+            font-size: 10px;
+            font-weight: normal;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .month-btn:hover, .month-btn.active-month {
+            background: #ff4757;
+            color: white;
+            border-color: #ff4757;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* CỘT PHẢI: KHU VỰC HIỂN THỊ CHI TIẾT ĐIỂM ĐẾN (Chiếm 75% chiều rộng) */
+        .display-container {
+            width: 75%;
+            display: flex;
+            gap: 25px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Khung thông tin bên trong cột phải */
+        .details-panel {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .details-header h3 {
+            color: #ff4757;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .details-header h2 {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .details-body p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .japanese-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2ed573;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .btn-booking {
+            width: 100%;
+            padding: 14px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn-booking:hover { background: #ee3848; }
+
+        /* Khung hình ảnh bên trong cột phải */
+        .visual-panel {
+            width: 55%;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .visual-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .visual-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            color: white;
+            padding: 20px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section">
+        <!-- THANH MENU TRÊN TOP CHUYỂN TRANG -->
+        <nav class="navbar">
+            <div class="logo"><h1>Vietnam<span>Travel</span></h1></div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">🏠 home</a></li>
+                <li><a href="gourmet_tips.html">🍽️ gourmet_tips</a></li>
+                <li><a href="tours.html">🛒 tours</a></li>
+            </ul>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            
+            <!-- CỘT TRÁI: MENU 12 THÁNG -->
+            <div class="months-sidebar">
+                <button class="month-btn active-month" data-month="1"><span>1月</span></button>
+                <button class="month-btn" data-month="2"> <span>2月</span></button>
+                <button class="month-btn" data-month="3"> <span>3月</span></button>
+                <button class="month-btn" data-month="4"> <span>4月</span></button>
+                <button class="month-btn" data-month="5"> <span>5月</span></button>
+                <button class="month-btn" data-month="6"> <span>6月</span></button>
+                <button class="month-btn" data-month="7"> <span>7月</span></button>
+                <button class="month-btn" data-month="8"> <span>8月</span></button>
+                <button class="month-btn" data-month="9"><span>9月</span></button>
+                <button class="month-btn" data-month="10"><span>10月</span></button>
+                <button class="month-btn" data-month="11"><span>11月</span></button>
+                <button class="month-btn" data-month="12"><span>12月</span></button>
+            </div>
+
+            <!-- CỘT PHẢI: CHI TIẾT ĐIỂM ĐẾN -->
+            <div class="display-container" id="display-container">
+                
+                <!-- Khung chữ nội dung -->
+                <div class="details-panel">
+                    <div class="details-header">
+                        <h3 id="target-time"> 1月の旅</h3>
+                        <h2 id="target-title">ハザン — 桃の花咲く春 của風物詩 (Hà Giang)</h2>
+                    </div>
+                    <div class="details-body">
+                        <div class="japanese-box" id="target-jp">
+                            【ハザン】年始はハザンの各集落で桃やスモモの花が咲き誇る最高の時期です。ベトナム北東部高地の澄んだ涼しい空気とともに絶景を楽しめます。
+                        </div>
+                    </div>
+                    <button class="btn-booking">Khám Phá Tour Ngay</button>
+                </div>
+
+                <!-- Khung hình ảnh lớn -->
+                <div class="visual-panel">
+                    <img id="target-img" src="image/ha-giang-mua-nay-co-gi-b48986-1200x900.webp" alt="Du lịch">
+                    <div class="visual-caption" id="target-caption">Sắc hoa xuân rực rỡ nơi cao nguyên đá</div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT XỬ LÝ CHUYỂN ĐỔI DỮ LIỆU ĐỘNG -->
+    <script>
+        const travelData = {
+            "1": {
+                time: " 1月の旅",
+                title: "ハザン — 桃の花咲く春の風物詩 (Hà Giang)",
+                jp: "【ハザン】年始はハザンの各集落で桃やスモモの花が咲き誇る最高の時期です。ベトナム北東部高地の澄んだ涼しい空気とともに絶景を楽しめます。",
+                img: "image/ha-giang-mua-nay-co-gi-b48986-1200x900.webp",
+                caption: "Sắc hoa xuân rực rỡ nơi cao nguyên đá"
+            },
+            "2": {
+                time: " 2月の旅",
+                title: "ニンビン — 新春を祝うお祭りシーズン (Ninh Bình)",
+                jp: "【ニンビン】2月は新春の旅に最適です。世界遺産のチャンアンやバイディン寺では、ベトナムの伝統적인春祭りの活気ある雰囲気を体験できます。",
+                img: "image/dia-diem-du-lich-ninh-binh-1_c95e3fbb5bee4484b6f39cadacd42349_grande.png",
+                caption: "Hòa mình vào thiên nhiên Tràng An xanh mướt"
+            },
+            "3": {
+                time: "3月の旅",
+                title: "テイグエン — 世界珈琲博物館 (Tây Nguyên)",
+                jp: "【世界珈琲博物館】ブアマチュオットにある、エデ族の伝統的な高床式住居（ニャーロン）を模した美しい建築が話題の博物館。テイグエン地方の文化を感じられる人気の映えスポットです。",
+                img: "image/bao-tang-the-gioi-ca-phe.jpg",
+                caption: "Mùa hoa cà phê phủ trắng núi đồi Tây Nguyên"
+            },
+            "4": {
+                time: "4月の旅",
+                title:"古都フエ — 歴史が息づく世界遺産の街 (Cố đô Huế)",
+                jp: "【フエ】4月は気候が穏やかで、古都フエの王宮散策に最適です。フォン川に架かるチャンティエン橋の景色や、繊細な宮廷料理を堪能できます。",
+                img: "image/hoangthanhhue.png",
+                caption: "Nét trầm mặc, cổ kính của Ngọ Môn Huế"
+            },
+            "5": {
+                time: " 5月の旅",
+                title:"ハロン湾 — 初夏の輝くエメラルドグリーンの海 (Vịnh Hạ Long)",
+                jp: "【ハロン湾】5月は本格的な夏の始まりで、海が青く穏やかになります。何千もの奇岩の間を豪華クルーズ船で巡る特別な体験がおすすめです。",
+                img: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800",
+                caption: "Kỳ quan thiên nhiên thế giới nhìn từ trên cao"
+            },
+            "6": {
+                time: "6月の旅",
+                title: "ダナン・バナヒルズ — 雲の中に浮かぶ神の手 (Bà Nà Hills)",
+                jp: "【バナヒルズ・ダナン】6月のイチオシ！標高1,400mにある中世ヨーロッパ風の避暑地。巨大な手が支える不思議な「ゴールデンブリッジ」は必見です。",
+                img: "image/danang.jpg",
+                caption: "Làng Pháp cổ kính & Cầu Vàng - バナヒルズ"
+            },
+            "7": {
+                time: "7月の旅",
+                title:"ニャチャン — 太陽が眩しい極上のビーチリゾート (Nha Trang)",
+                jp: "【ニャチャン】7月は太陽が眩しい絶好 Guild のビーチシーズン。サンゴ礁を見るダイビングや、離島でのアクティビティ、テーマパークが楽しめます。",
+                img: "image/nhatrang.jpg",
+                caption: "Bờ biển trong xanh trải dài của vịnh Nha Trang"
+            },
+            "8": {
+                time: " 8月の旅",
+                title: "フーコック島 — 夕日に染まる魅惑 của真珠の島 (Phú Quốc)",
+                jp: "【フーコック島】8月の夏の終わりに、高級リゾートでのんびり過ごすのはいかがでしょうか。美しいビーチで沈む夕日を眺める時間は格別です。",
+                img: "image/phuquoc (2).jpg",
+                caption: "Bãi cát trắng mịn màng bên làn nước ấm áp"
+            },
+            "9": {
+                time: "9月の旅",
+                title: "ムーカンチャイ — 黄金色に輝く壮大な棚田 (Mù Cang Chải)",
+                jp: "【ムーカンチャイ】9月は北西部が黄金色に染まる稲穂 của 収穫期です。山肌に広がる壮大な棚田の波は、圧倒されるほどの美しさです。",
+                img: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=800",
+                caption: "Thảm lúa vàng óng ả trải dài ngút ngàn"
+            },
+            "10": {
+                time: "10月の旅",
+                title: "ハノイ — ロマンチックな黄金色の秋の街並み (Hà Nội)",
+                jp: "【ハノイの秋】10月のハノイは最も美しい秋を迎えます。涼しい風が吹き、旧市街を散策しながら伝統菓子（コム）を味わうのが粋な過ごし方です。",
+                img: "image/mua_thu_ha_noi_14.jpg",
+                caption: "Mùa thu lá vàng lãng mạn bên Hồ Hoàn Kiếm"
+            },
+            "11": {
+                time: " 11月の旅",
+                title: "ホイアン — ランタンが灯るノスタルジックな古都 (Hội An)",
+                jp: "【ホイアン】11月は心地よい気候になり、夜になると古い街並みがランタンの温かい光で幻想的に包まれます。ノスタルジーを感じる旅へ。",
+                img: "image/chua cau hoi an.jpg",
+                caption: "Vẻ đẹp lung linh của phố cổ Hội An về đêm"
+            },
+            "12": {
+                time: "12月の旅",
+                title: "ムイネー — 風と太陽が織りなす神秘的な砂丘 (Mũi Né)",
+                jp: "【ムイネー】12月はカイトサーフィンのベストシーズンです。まるでサハラ砂漠のような広大な白い砂丘（ホワイトサデューン）の絶景が広がります。",
+                img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=800",
+                caption: "Những đồi cát uốn lượn độc đáo tại Mũi Né"
+            }
+        };
+
+        const buttons = document.querySelectorAll('.month-btn');
+        const targetTime = document.getElementById('target-time');
+        const targetTitle = document.getElementById('target-title');
+        const targetJp = document.getElementById('target-jp');
+        const targetImg = document.getElementById('target-img');
+        const targetCaption = document.getElementById('target-caption');
+        const displayContainer = document.getElementById('display-container');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                buttons.forEach(btn => btn.classList.remove('active-month'));
+                this.classList.add('active-month');
+
+                const selectedMonth = this.getAttribute('data-month');
+                const data = travelData[selectedMonth];
+
+                displayContainer.style.animation = 'none';
+                displayContainer.offsetHeight; 
+                displayContainer.style.animation = 'fadeIn 0.5s ease';
+
+                targetTime.innerText = data.time;
+                targetTitle.innerText = data.title;
+                targetJp.innerText = data.jp;
+                targetImg.setAttribute('src', data.img);
+                targetCaption.innerText = data.caption;
+            });
+        });
+    </script>
+</body>
+</html>
