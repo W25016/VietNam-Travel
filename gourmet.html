@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>美食の旅 — Vietnam Travel Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #12151e;
+      --fg: #f0ece0;
+      --muted: #6b7280;
+      --primary: #d97706;
+      --primary-fg: #ffffff;
+      --card-bg: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.1);
+      --secondary-bg: rgba(255,255,255,0.08);
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      padding: 0 1rem;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-top: none;
+      border-radius: 0 0 1rem 1rem;
+      padding: 0.5rem 2rem;
+      width: 100%;
+      max-width: 768px;
+    }
+    .nav-logo { display: flex; gap: 0.5rem; align-items: center; text-decoration: none; }
+    .nav-logo-white { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: white; }
+    .nav-logo-gold  { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fbbf24; font-style: italic; }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-link {
+      padding: 0.4rem 1rem;
+      border-radius: 9999px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: white; }
+    .nav-link.active { background: var(--primary); color: white; }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 1152px;
+      margin: 0 auto;
+      padding: 6rem 1.5rem 5rem;
+    }
+
+    /* ── HEADER ── */
+    .page-header { margin-bottom: 2.5rem; animation: fadeUp 0.6s ease both; }
+    .label-mono { font-family: var(--font-mono); font-size: 0.7rem; color: var(--primary); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 1rem; }
+    .page-title { font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 900; color: var(--fg); letter-spacing: -0.02em; margin-bottom: 1rem; }
+    .page-subtitle { font-size: 1.1rem; color: var(--muted); max-width: 36rem; line-height: 1.7; }
+
+    /* ── SECTION HEADER ── */
+    .section-header { margin-bottom: 2rem; }
+    .section-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.25rem; }
+    .section-title { font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 700; color: var(--fg); }
+    .section-title span { color: var(--muted); font-size: 1.1rem; font-weight: 400; font-style: italic; }
+
+    /* ── FILTERS ── */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .filters-left { flex: 1; min-width: 200px; }
+    .search-wrap { position: relative; min-width: 180px; }
+    .search-icon {
+      position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: var(--muted); pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      padding: 0.625rem 1rem 0.625rem 2.5rem;
+      border-radius: 9999px;
+      background: var(--secondary-bg);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      outline: none;
+      min-height: 48px;
+      transition: box-shadow 0.2s;
+    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { box-shadow: 0 0 0 2px var(--primary); }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: var(--secondary-bg);
+      color: var(--muted);
+      min-height: 48px;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { color: var(--fg); }
+    .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* ── GRID ── */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* ── GOURMET CARD ── */
+    .gourmet-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.4s;
+      animation: fadeUp 0.5s ease both;
+    }
+    .gourmet-card:hover { border-color: rgba(217,119,6,0.4); }
+    .gourmet-card:hover .card-title { color: var(--primary); }
+    .gourmet-card:hover .card-img { transform: scale(1.05); }
+
+    .card-img-wrap { position: relative; height: 192px; overflow: hidden; }
+    .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+    .card-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,21,30,0.6), transparent); }
+    .card-badge {
+      position: absolute; top: 0.75rem; left: 0.75rem;
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em;
+      border-radius: 9999px; padding: 0.2rem 0.75rem;
+      backdrop-filter: blur(8px); background: rgba(18,21,30,0.5);
+      border: 1px solid;
+    }
+    .badge-north { color: #38bdf8; border-color: rgba(56,189,248,0.3); }
+    .badge-central { color: #fbbf24; border-color: rgba(251,191,36,0.3); }
+    .badge-south { color: #34d399; border-color: rgba(52,211,153,0.3); }
+    .card-index {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      font-family: var(--font-mono); font-size: 0.6rem; color: rgba(240,236,224,0.5);
+      backdrop-filter: blur(8px); background: rgba(18,21,30,0.5);
+      border-radius: 9999px; padding: 0.2rem 0.5rem;
+    }
+
+    .card-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+    .card-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--fg); margin-bottom: 0.25rem; transition: color 0.3s; }
+    .card-name-jp { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; }
+    .card-desc { font-size: 0.875rem; color: rgba(240,236,224,0.7); line-height: 1.6; flex: 1; margin-bottom: 1.25rem; }
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .card-time { display: flex; align-items: center; gap: 0.5rem; color: var(--muted); font-family: var(--font-mono); font-size: 0.7rem; }
+    .card-meta { display: flex; align-items: center; gap: 0.75rem; }
+    .card-diff { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); }
+    .card-price { font-family: var(--font-display); font-size: 1rem; color: var(--primary); font-weight: 600; }
+
+    /* ── DIVIDER ── */
+    .divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0; }
+    .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .divider-dot { font-family: var(--font-mono); font-size: 0.6rem; color: rgba(107,114,128,0.4); padding: 0 0.5rem; }
+
+    /* ── TIP CARD ── */
+    .tip-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: border-color 0.4s;
+      animation: fadeUp 0.5s ease both;
+    }
+    .tip-card:hover { border-color: rgba(217,119,6,0.4); }
+    .tip-card:hover .tip-title { color: var(--primary); }
+
+    .tip-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .tip-icon { font-size: 1.8rem; }
+    .tip-category {
+      font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.15em;
+      border-radius: 9999px; padding: 0.2rem 0.75rem; border: 1px solid;
+    }
+    .cat-transport  { color: #38bdf8; border-color: rgba(56,189,248,0.3);  background: rgba(56,189,248,0.1); }
+    .cat-weather    { color: #fbbf24; border-color: rgba(251,191,36,0.3);  background: rgba(251,191,36,0.1); }
+    .cat-money      { color: #34d399; border-color: rgba(52,211,153,0.3);  background: rgba(52,211,153,0.1); }
+    .cat-internet   { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.1); }
+    .cat-health     { color: #fb7185; border-color: rgba(251,113,133,0.3); background: rgba(251,113,133,0.1); }
+    .cat-culture    { color: #fb923c; border-color: rgba(251,146,60,0.3);  background: rgba(251,146,60,0.1); }
+
+    .tip-title { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--fg); margin-bottom: 0.25rem; transition: color 0.3s; }
+    .tip-title-vi { font-family: var(--font-mono); font-size: 0.65rem; color: rgba(107,114,128,0.6); margin-bottom: 1rem; }
+    .tip-desc { font-size: 0.875rem; color: rgba(240,236,224,0.7); line-height: 1.6; margin-bottom: 1.25rem; }
+    .pro-tip {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.75rem; border-radius: 0.75rem;
+      background: rgba(217,119,6,0.05); border: 1px solid rgba(217,119,6,0.1);
+    }
+    .pro-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--primary); font-weight: 700; flex-shrink: 0; margin-top: 0.1rem; }
+    .pro-text { font-size: 0.75rem; color: rgba(240,236,224,0.6); line-height: 1.5; }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 4rem 0; color: var(--muted); }
+    .empty-emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    /* ── 🛠️ THÊM MỚI: CSS CHO GALLERY LIGHTBOX (ĐỒNG BỘ DARK MODE MỜ) ── */
+    .gallery-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(18, 21, 30, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 2rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--fg);
+      font-size: 1.1rem;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .lightbox-close:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .lightbox-img {
+      max-width: 90%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      animation: lightboxFadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .lightbox-caption {
+      color: var(--fg);
+      margin-top: 1.5rem;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      text-align: center;
+      max-width: 600px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── ANIMATION ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes lightboxFadeUp {
+      from { opacity: 0; transform: scale(0.95) translateY(15px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      .nav-inner { padding: 0.5rem 1rem; }
+      main { padding: 5rem 1rem 3rem; }
+      .lightbox-img { max-width: 95%; max-height: 60vh; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="gourmetLightbox" class="gallery-lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightboxLargeImg" class="lightbox-img" src="" alt="" onclick="event.stopPropagation()"/>
+  <p id="lightboxCaption" class="lightbox-caption"></p>
+</div>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-white">Vietnam</span>
+      <span class="nav-logo-gold">Travel</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Chronicle</a>
+      <a href="gourmet.html" class="nav-link active">Gourmet</a>
+      <a href="tours.html" class="nav-link">Tours</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="page-header">
+    <p class="label-mono">Culinary Heritage & Travel Wisdom</p>
+    <h1 class="page-title">美食の旅</h1>
+    <p class="page-subtitle">ベトナムの北から南まで、各地域が誇る伝統の味覚と旅の智慧。一皿ごとに歴史と文化が薫ります。</p>
+  </div>
+
+  <div style="margin-bottom:4rem">
+    <div class="filters">
+      <div class="filters-left">
+        <p class="section-label">Section 01</p>
+        <h2 class="section-title">ベトナムグルメ <span>— Ẩm Thực</span></h2>
+      </div>
+      <div class="search-wrap">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input class="search-input" type="text" id="searchInput" placeholder="料理名で検索..." oninput="filterCards()" />
+      </div>
+      <button class="filter-btn active" onclick="setRegion('すべて', this)">すべて</button>
+      <button class="filter-btn" onclick="setRegion('北部', this)">北部</button>
+      <button class="filter-btn" onclick="setRegion('中部', this)">中部</button>
+      <button class="filter-btn" onclick="setRegion('南部', this)">南部</button>
+    </div>
+
+    <div class="grid-3" id="gourmetGrid"></div>
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="empty-emoji">🍜</div>
+      <p>検索結果がありません</p>
+    </div>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-dot">✦</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <div>
+    <div class="section-header">
+      <p class="section-label">Section 02</p>
+      <h2 class="section-title">旅の知恵 <span>— Travel Tips</span></h2>
+    </div>
+    <div class="grid-3" id="tipsGrid"></div>
+  </div>
+</main>
+
+<script>
+const gourmetData = [
+  { name:"Phở Hà Nội", nameJp:"ハノイのフォー", desc:"澄んだ牛骨スープに米粉の麺、薄切り牛肉。北部の魂とも言える一杯。", region:"北部", price:"40,000₫", difficulty:"★★☆", bestTime:"朝食", img:"https://statics.vinpearl.com/pho-bo-ha-noi-7_1688008286.jpg" },
+  { name:"Bún Bò Huế", nameJp:"フエの牛肉ビーフン", desc:"レモングラスが香る濃厚なスパイシースープ。中部フエの代表格。", region:"中部", price:"35,000₫", difficulty:"★★★", bestTime:"昼食", img:"https://images.unsplash.com/photo-1555126634-323283e090fa?q=80&w=800" },
+  { name:"Bánh Mì Sài Gòn", nameJp:"サイゴンのバインミー", desc:"カリッとしたフランスパンに、パテ、肉、野菜を挟んだベトナム式サンドイッチ。", region:"南部", price:"25,000₫", difficulty:"★☆☆", bestTime:"いつでも", img:"https://exploreve.com/wp-content/uploads/2025/05/Bm-huynh-hoa.jpg" },
+  { name:"Cà Phê Trứng", nameJp:"エッグコーヒー", desc:"濃厚な卵クリームをのせたハノイ発祥のコーヒー。甘くて温かい一杯。", region:"北部", price:"35,000₫", difficulty:"★☆☆", bestTime:"午後", img:"https://longshortlondon.com/wp-content/uploads/2018/04/Egg-Coffee-1.jpg" },
+  { name:"Cao Lầu", nameJp:"カオラウ", desc:"ホイアンだけで味わえる、モチモチ食感の太麺。秘伝の井戸水で作られる。", region:"中部", price:"40,000₫", difficulty:"★★☆", bestTime:"昼食", img:"https://img.magnific.com/premium-photo/cao-lau-noodles-with-pork-traditional-food-vietnam_1020514-32911.jpg" },
+  { name:"Bánh Xèo", nameJp:"バインセオ", desc:"ターメリック色のパリパリクレープに、エビや豚肉、もやしがたっぷり。", region:"南部", price:"30,000₫", difficulty:"★★☆", bestTime:"夕食", img:"https://thekitchencommunity.org/wp-content/uploads/2022/12/image-14.jpeg" },
+  { name:"Chả Cá Lã Vọng", nameJp:"チャーカー・ラーヴォン", desc:"ハノイ名物。ターメリックで炒めた白身魚にディルをのせ、卓上で自分で焼く体験型料理。", region:"北部", price:"120,000₫", difficulty:"★★★", bestTime:"夕食", img:"https://static.vinwonders.com/production/cha-ca-la-vong-ha-noi-4.jpg" },
+  { name:"Bún Chả", nameJp:"ブンチャー", desc:"炭火で焼いた豚のパティと米粉 diêm để ăn kèm nước chấm chua ngọt. Món ăn trứ danh Hà Nội.", region:"北部", price:"45,000₫", difficulty:"★☆☆", bestTime:"昼食", img:"https://friendlywell.com/wp-content/uploads/2026/01/bfdaafad-efef-4427-a201-f2a6e6bf71c7tl_pszpqb.webp" },
+  { name:"Mì Quảng", nameJp:"ミークアン", desc:"クアンナム省発祥。ターメリック黄色の幅広麺に、海老・豚・卵をのせた具だくさんの麺料理。", region:"中部", price:"35,000₫", difficulty:"★★☆", bestTime:"朝昼", img:"https://culaochamtravel.vn/wp-content/uploads/2023/08/dac-san-da-nang-10.jpg" },
+  { name:"Gỏi Cuốn", nameJp:"生春巻き", desc:"ライスペーパーに海老・豚肉・ハーブを巻いたヘルシーなサイゴン名物。ピーナッツソースで。", region:"南部", price:"20,000₫", difficulty:"★☆☆", bestTime:"前菜", img:"https://myhomemaderecipe.com/assets/images/1735862553371-fg4pt9uz.webp" },
+  { name:"Bún Thịt Nướng", nameJp:"焼き肉ビーフン", desc:"炭火で香ばしく焼いた豚肉を冷たいビーフンにのせ、ヌクマムダレで食べる南部の夏の味。", region:"南部", price:"45,000₫", difficulty:"★★☆", bestTime:"昼食", img:"https://i.ytimg.com/vi/DWAdlGKcTG0/maxresdefault.jpg" },
+  { name:"Bánh Cuốn", nameJp:"バインクォン", desc:"薄い米粉蒸しシートに豚ひき肉 và mộc nhĩ cuộn lại. Món ăn sáng quen thuộc của miền Bắc.", region:"北部", price:"30,000₫", difficulty:"★★★", bestTime:"朝食", img:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2a/a8/04/06/steamed-rice-pancakes.jpg?w=1100&h=-1&s=1" }
+];
+
+const tipsData = [
+  { title:"安全な移動手段 — Grab アプリ", titleVi:"Di chuyển bằng Grab", desc:"ベトナム国内 của di chuyển là ứng dụng gọi xe Grab bắt buộc. Không sợ chặt chém, biết trước giá tiền. Xe ôm (GrabBike) lách qua tắc đường nhanh nhất.", category:"交通", icon:"🛵", tip:"空港ではGrab専用乗り場を使うこと。一般タクシーより30%安い。" },
+  { title:"気候と服装の選び方", titleVi:"Thời tiết & Trang phục", desc:"ベトナムは南北で気候が大きく異なります。ハノイ（北部）には冬（12月〜2月）があり肌寒いですが、ホーチミン（南部）は一年中常夏。地域と季節に合わせた服装選びが大切です。", category:"気候", icon:"🌤️", tip:"北部を冬に訪れる場合は薄手のダウン te. 寺院訪問には肩 và đầu gối kín đáo." },
+  { title:"両替と通貨の基礎知識", titleVi:"Đổi tiền & Tiền tệ", desc:"ベトナムの通貨は「ドン（VND）」。日本よりも現地（空港・市内の金閣店）での両替がレートが有利。米ドルも多くのホテルで使用可能です。", category:"お金", icon:"💰", tip:"市内の金閣店（Tiệm Vàng）は最もレートが良い。小額紙幣を多めに用意すると屋台で便利。" },
+  { title:"SIMカードと通信環境", titleVi:"SIM & Internet", desc:"空港到着後すぐにローカルSIMを購入（約500円）。Viettelが最も電波が安定。1ヶ月無制限データ付きで非常にリーズナブルです。", category:"通信", icon:"📱", tip:"空港の公式SIM販売ブースを利用すること。非公式業者は避けて。" },
+  { title:"食事の衛生と注意点", titleVi:"Vệ sinh thực phẩm", desc:"屋台料理は美味しいですが、氷や生野菜には注意が必要。地元の人で混んでいる店は新鮮な証拠。ペットボトルの水を常に携帯しましょう。", category:"健康", icon:"🏥", tip:"屋台は回転率が高い早朝〜昼を狙うと安全で美味しい。旅行保険の加入を強く推奨。" },
+  { title:"値段交渉のマナー và 相場", titleVi:"Mặc cả & Giá cả", desc:"市場やお土産店では値段交渉が一般的。提示価格の50〜70%を目安に交渉しましょう。笑顔で楽しく行うのがベトナム流。スーパーとコンビニは定価なので交渉不要。", category:"文化", icon:"🤝", tip:"「Bao nhiêu?（バオニエウ）= いくら？」と「Đắt quá!（ダッコア）= 高すぎる！」を覚えると有利。" }
+];
+
+const regionBadge = { "北部":"badge-north", "中部":"badge-central", "南部":"badge-south" };
+const catClass = { "交通":"cat-transport","気候":"cat-weather","お金":"cat-money","通信":"cat-internet","健康":"cat-health","文化":"cat-culture" };
+
+let currentRegion = "すべて";
+
+function buildGourmetCards(items) {
+  const grid = document.getElementById("gourmetGrid");
+  const empty = document.getElementById("emptyState");
+  
+  if (items.length === 0) {
+    grid.innerHTML = "";
+    empty.style.display = "block";
+    return;
+  }
+  
+  empty.style.display = "none";
+  const htmlContent = items.map((item, i) => `
+    <div class="gourmet-card" style="animation-delay:${i * 0.05}s">
+      <div class="card-img-wrap" style="cursor: pointer;" onclick="openLightbox('${item.img}', '${item.nameJp} — ${item.name}')">
+        <img class="card-img" src="${item.img}" alt="${item.name}" loading="lazy" />
+        <div class="card-img-overlay"></div>
+        <span class="card-badge ${regionBadge[item.region] || ''}">${item.region}</span>
+        <span class="card-index">${String(i + 1).padStart(2, "0")}</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">${item.name}</h3>
+        <p class="card-name-jp">${item.nameJp}</p>
+        <p class="card-desc">${item.desc}</p>
+        <div class="card-footer">
+          <div class="card-time">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${item.bestTime}
+          </div>
+          <div class="card-meta">
+            <span class="card-diff">${item.difficulty}</span>
+            <span class="card-price">${item.price}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  
+  grid.innerHTML = htmlContent;
+}
+
+function buildTipCards() {
+  const grid = document.getElementById("tipsGrid");
+  const htmlContent = tipsData.map((tip, i) => `
+    <div class="tip-card" style="animation-delay:${i * 0.05}s">
+      <div class="tip-header">
+        <span class="tip-icon">${tip.icon}</span>
+        <span class="tip-category ${catClass[tip.category] || ''}">${tip.category}</span>
+      </div>
+      <h3 class="tip-title">${tip.title}</h3>
+      <p class="tip-title-vi">${tip.titleVi}</p>
+      <p class="tip-desc">${tip.desc}</p>
+      <div class="pro-tip">
+        <span class="pro-label">PRO TIP</span>
+        <p class="pro-text">${tip.tip}</p>
+      </div>
+    </div>
+  `).join('');
+  
+  grid.innerHTML = htmlContent;
+}
+
+function filterCards() {
+  const q = document.getElementById("searchInput").value.toLowerCase().trim();
+  const filtered = gourmetData.filter(item =>
+    (currentRegion === "すべて" || item.region === currentRegion) &&
+    (q === "" || item.name.toLowerCase().includes(q) || item.nameJp.includes(q))
+  );
+  buildGourmetCards(filtered);
+}
+
+function setRegion(r, btn) {
+  currentRegion = r;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  filterCards();
+}
+
+function openLightbox(url, caption) {
+  const lightbox = document.getElementById("gourmetLightbox");
+  const largeImg = document.getElementById("lightboxLargeImg");
+  const capText = document.getElementById("lightboxCaption");
+
+  if (lightbox && largeImg && capText) {
+    largeImg.src = url;
+    largeImg.alt = caption;
+    capText.textContent = caption;
+    lightbox.style.display = "flex"; 
+    document.body.style.overflow = "hidden"; 
+  }
+}
+
+function closeLightbox() {
+  const lightbox = document.getElementById("gourmetLightbox");
+  if (lightbox) {
+    lightbox.style.display = "none"; 
+    document.body.style.overflow = ""; 
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeLightbox();
+});
+
+buildGourmetCards(gourmetData);
+buildTipCards();
+</script>
+</body>
+</html>

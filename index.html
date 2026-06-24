@@ -1,411 +1,390 @@
 <!DOCTYPE html>
-<html lang="vi">
-<head>    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cẩm Nang Du Lịch Việt Nam 12 Tháng</title>
-    <style>
-        /* --- RESET & STYLE CƠ BẢN --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vietnam Travel Guide — Chronicle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-        body, html {
-            height: 100%;
-            overflow: hidden;
-            background-color: #f4f7f6;
-        }
-
-        /* --- LỚP NỀN TOÀN MÀN HÌNH --- */
-        .hero-section {
-            width: 100%;
-            height: 100vh;
-            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), 
-                              url('https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1920'); 
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        /* --- THANH MENU TRÊN CÙNG (NAVBAR) --- */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 50px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            z-index: 10;
-        }
-
-        .logo h1 {
-            color: #ffffff;
-            font-size: 24px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .logo span { color: #ff4757; }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            padding: 6px 12px;
-            border-radius: 4px;
-        }
-
-        /* Hiệu ứng khi di chuột qua hoặc trang đang mở */
-        .nav-links a:hover, .nav-links a.active { 
-            color: #ffffff; 
-            background: #ff4757;
-        }
-
-        /* --- KHU VỰC NỘI DUNG CHÍNH (CHIA THÀNH 2 CỘT DỌC) --- */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            padding: 30px 50px;
-            gap: 30px;
-            align-items: stretch;
-            height: calc(100vh - 75px);
-        }
-
-        /* CỘT TRÁI: DANH SÁCH 12 THÁNG (Chiếm 25% chiều rộng) */
-        .months-sidebar {
-            width: 25%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 15px;
-            padding: 15px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột nút bấm nhỏ gọn */
-            gap: 12px;
-            align-content: start;
-            overflow-y: auto;
-        }
-
-        .month-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .month-btn span {
-            display: block;
-            font-size: 10px;
-            font-weight: normal;
-            opacity: 0.7;
-            margin-top: 2px;
-        }
-
-        .month-btn:hover, .month-btn.active-month {
-            background: #ff4757;
-            color: white;
-            border-color: #ff4757;
-            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
-            transform: translateY(-2px);
-        }
-
-        /* CỘT PHẢI: KHU VỰC HIỂN THỊ CHI TIẾT ĐIỂM ĐẾN (Chiếm 75% chiều rộng) */
-        .display-container {
-            width: 75%;
-            display: flex;
-            gap: 25px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Khung thông tin bên trong cột phải */
-        .details-panel {
-            width: 45%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .details-header h3 {
-            color: #ff4757;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        .details-header h2 {
-            color: #2c3e50;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .details-body p {
-            color: #555;
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .japanese-box {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #2ed573;
-            font-size: 14px;
-            color: #333;
-            line-height: 1.5;
-        }
-
-        .btn-booking {
-            width: 100%;
-            padding: 14px;
-            background: #ff4757;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-
-        .btn-booking:hover { background: #ee3848; }
-
-        /* Khung hình ảnh bên trong cột phải */
-        .visual-panel {
-            width: 55%;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
-
-        .visual-panel img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .visual-caption {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(transparent, rgba(0,0,0,0.85));
-            color: white;
-            padding: 20px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-    </style>
 </head>
 <body>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #d97706;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    html, body { height: 100%; overflow: hidden; background: #000; color: #f0ece0; font-family: var(--font-body); }
 
-    <div class="hero-section">
-        <!-- THANH MENU TRÊN TOP CHUYỂN TRANG -->
-        <nav class="navbar">
-            <div class="logo"><h1>Vietnam<span>Travel</span></h1></div>
-            <ul class="nav-links">
-                <li><a href="index.html" class="active">🏠 home</a></li>
-                <li><a href="gourmet_tips.html">🍽️ gourmet_tips</a></li>
-                <li><a href="tours.html">🛒 tours</a></li>
-            </ul>
-        </nav>
+    /* NAV */
+    nav { position: fixed; top: 0; left: 56px; right: 0; z-index: 100; display: flex; justify-content: center; padding: 0 1rem; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px); background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-top: none; border-radius: 0 0 1rem 1rem; padding: 0.5rem 2rem; width: 100%; max-width: 768px; }
+    .nav-logo { display: flex; gap: 0.5rem; align-items: center; text-decoration: none; }
+    .nav-logo-white { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: white; }
+    .nav-logo-gold  { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: #fbbf24; font-style: italic; }
+    .nav-links { display: flex; gap: 0.25rem; }
+    .nav-link { padding: 0.4rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: white; }
+    .nav-link.active { background: var(--primary); color: white; }
 
-        <!-- MAIN CONTENT -->
-        <div class="main-content">
-            
-            <!-- CỘT TRÁI: MENU 12 THÁNG -->
-            <div class="months-sidebar">
-                <button class="month-btn active-month" data-month="1"><span>1月</span></button>
-                <button class="month-btn" data-month="2"> <span>2月</span></button>
-                <button class="month-btn" data-month="3"> <span>3月</span></button>
-                <button class="month-btn" data-month="4"> <span>4月</span></button>
-                <button class="month-btn" data-month="5"> <span>5月</span></button>
-                <button class="month-btn" data-month="6"> <span>6月</span></button>
-                <button class="month-btn" data-month="7"> <span>7月</span></button>
-                <button class="month-btn" data-month="8"> <span>8月</span></button>
-                <button class="month-btn" data-month="9"><span>9月</span></button>
-                <button class="month-btn" data-month="10"><span>10月</span></button>
-                <button class="month-btn" data-month="11"><span>11月</span></button>
-                <button class="month-btn" data-month="12"><span>12月</span></button>
-            </div>
+    /* TIMELINE SIDEBAR */
+    #sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 75px;z-index: 40; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(12px); border-right: 1px solid rgba(255,255,255,0.1); }
+    .month-btn { position: relative; width: 100%; display: flex; align-items: center; justify-content: center; padding: 0.5rem 0; cursor: pointer; background: none; border: none; transition: all 0.2s; }
+    .month-btn .bar { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: #fbbf24; display: none; }
+    .month-btn.active .bar { display: block; }
+    .month-btn span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; color: rgba(255,255,255,0.4); transition: all 0.2s; }
+    .month-btn.active span { color: #fbbf24; font-weight: 700; transform: scale(1.1); }
+    .month-btn:hover span { color: rgba(255,255,255,0.8); }
 
-            <!-- CỘT PHẢI: CHI TIẾT ĐIỂM ĐẾN -->
-            <div class="display-container" id="display-container">
-                
-                <!-- Khung chữ nội dung -->
-                <div class="details-panel">
-                    <div class="details-header">
-                        <h3 id="target-time"> 1月の旅</h3>
-                        <h2 id="target-title">ハザン — 桃の花咲く春 của風物詩 (Hà Giang)</h2>
-                    </div>
-                    <div class="details-body">
-                        <div class="japanese-box" id="target-jp">
-                            【ハザン】年始はハザンの各集落で桃やスモモの花が咲き誇る最高の時期です。ベトナム北東部高地の澄んだ涼しい空気とともに絶景を楽しめます。
-                        </div>
-                    </div>
-                    <button class="btn-booking">Khám Phá Tour Ngay</button>
-                </div>
+    /* HERO */
+    #hero { position: fixed; inset: 0; overflow: hidden; }
+    #hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.9s ease, transform 0.9s ease; }
+    .hero-overlay-t { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.3)); }
+    .hero-overlay-l { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.1) 60%, transparent); }
 
-                <!-- Khung hình ảnh lớn -->
-                <div class="visual-panel">
-                    <img id="target-img" src="image/ha-giang-mua-nay-co-gi-b48986-1200x900.webp" alt="Du lịch">
-                    <div class="visual-caption" id="target-caption">Sắc hoa xuân rực rỡ nơi cao nguyên đá</div>
-                </div>
+    /* ROMAN NUMERAL WATERMARK */
+    #roman { position: absolute; right: 0; top: 50%; transform: translateY(-50%); pointer-events: none; user-select: none; overflow: hidden; opacity: 0.12; font-family: var(--font-display); font-size: clamp(10rem, 28vw, 34rem); font-weight: 900; color: white; line-height: 1; transition: opacity 0.4s; }
 
-            </div>
+    /* CONTENT PANEL */
+    #content { position: absolute; bottom: 14rem; left: 0; right: 0; z-index: 10; padding-left: clamp(5rem, 10vw, 9rem); padding-right: 1.5rem; max-width: 750px; transition: opacity 0.55s ease, transform 0.55s ease; }
+    #content.fade-out { opacity: 0; transform: translateY(-15px); }
+    .pill { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); border-radius: 9999px; padding: 0.375rem 1rem; margin-bottom: 1rem; }
+    .pill-coords { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.9); letter-spacing: 0.15em; }
+    .pill-sep { width: 5px; height: 30px; background: rgba(255,255,255,0.3); }
+    .pill-weather { font-family: var(--font-mono); font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; }
+    .time-label { font-family: var(--font-mono); font-size: 0.7rem; color: #fcd34d; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .hero-title { font-family: var(--font-display); font-size: clamp(1.25rem, 3.5vw, 2.25rem); font-weight: 700; color: white; line-height: 1.1; letter-spacing: -0.02em; text-shadow: 0 5px 30px rgba(0,0,0,0.5); margin-bottom: 0.25rem; }
+    .hero-title-vi { font-family: var(--font-body); font-size: 0.875rem; color: rgba(255,255,255,0.6); font-style: italic; margin-bottom: 0.75rem; }
+    .glass-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(40px); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 1rem; padding: 2.5rem 2.75rem; box-shadow: 0 30px 70px rgba(0,0,0,0.3); max-width: 750px; }
+    .glass-card p { font-family: var(--font-body); font-size: 1.75rem; color: rgba(255,255,255,0.9); line-height: 1.3; }
+    .glass-card-footer { margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 0.5rem; }
+    .glass-card-elev{font-family: var(--font-mono); font-size: 10px; color: #fbbf24; letter-spacing: 0.15em; } 
+    .glass-card-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+    .glass-card-cap { font-family: var(--font-mono); font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 0.08sem; }
 
-        </div>
+    /* SCROLL HINT */
+    .scroll-hint { position: fixed; bottom: 11rem; left: 50%; transform: translateX(-50%); z-index: 30; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; pointer-events: none; }
+    .scroll-hint span { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+    .scroll-line { width: 1px; height: 24px; background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* GALLERY STRIP */
+    #gallery-wrap { position: fixed; bottom: 0; left: 56px; right: 0; z-index: 20; padding: 0.75rem 1rem 0.75rem; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 60%, transparent); }
+    .gallery-inner { position: relative; }
+    .gallery-strip { display: flex; gap: 0.75rem; overflow-x: hidden; scroll-behavior: smooth; padding: 0.25rem 2.5rem; scrollbar-width: none; transition: transform 0.4s ease;}
+    .gallery-strip::-webkit-scrollbar { display: none; }
+    .gallery-thumb { position: relative; flex: 1 1 0; min-width: 0; height: 88px; border-radius: 0.75rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: border-color 0.3s; background: none; padding: 0; }
+    .gallery-thumb:hover { border-color: rgba(255,255,255,0.4); }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+    .gallery-thumb:hover img { transform: scale(1.1); }
+    .gallery-thumb-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); }
+    .gallery-thumb-cap { position: absolute; bottom: 0.5rem; left: 0.5rem; right: 0.5rem; font-family: var(--font-body); font-size: 10px; color: rgba(255,255,255,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+    .gallery-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 2rem; height: 2rem; border-radius: 9999px; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; line-height: 1; transition: background 0.2s; }
+    .gallery-arrow:hover { background: rgba(0,0,0,0.6); }
+    .gallery-arrow-left { left: 0; }
+    .gallery-arrow-right { right: 0; }
+
+    /* MONTH DIAL */
+    #dial-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 50; }
+    #dial-toggle { width: 3.25rem; height: 3.25rem; border-radius: 9999px; background: var(--primary); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(217,119,6,0.4); font-size: 1.25rem; transition: transform 0.2s; }
+    #dial-toggle:hover { transform: scale(1.05); }
+    #dial-menu { position: absolute; bottom: 4rem; right: 0; background: rgba(20,20,30,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.15); border-radius: 1rem; padding: 1rem; display: none; width: 14rem; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+    #dial-menu.open { display: block; }
+    .dial-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+    .dial-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0.625rem 0.25rem; border-radius: 0.5rem; border: none; cursor: pointer; background: transparent; color: rgba(255,255,255,0.5); transition: all 0.2s; font-family: var(--font-body); }
+    .dial-btn:hover { background: rgba(255,255,255,0.08); color: white; }
+    .dial-btn.active { background: var(--primary); color: white; }
+    .dial-btn-roman { font-family: var(--font-mono); font-size: 9px; }
+    .dial-btn-label { font-size: 11px; font-weight: 500; }
+
+    /* LIGHTBOX */
+    #lightbox { position: absolute; top; z-index: 200; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 1rem; }
+    #lightbox.open { display: flex; }
+    .lb-inner { position: relative; max-width: 900px; width: 100%; border-radius: 1rem; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
+    .lb-inner img { width: 100%; max-height: 80vh; object-fit: cover; display: block; }
+    .lb-cap { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); padding: 1.25rem; }
+    .lb-cap p { font-family: var(--font-body); font-size: 0.875rem; color: white; }
+    .lb-close { position: absolute; top: 0.75rem; right: 0.75rem; width: 2rem; height: 2rem; border-radius: 9999px; background: rgba(0,0,0,0.5); border: none; color: white; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+    .lb-close:hover { background: rgba(0,0,0,0.8); }
+
+    @media (max-width: 640px) {
+      nav { left: 0; }
+      #sidebar { display: none; }
+      #content { padding-left: 1rem; }
+      #gallery-wrap { left: 0; }
+    }
+  </style>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-white">Vietnam</span>
+      <span class="nav-logo-gold">Travel</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Chronicle</a>
+      <a href="gourmet.html" class="nav-link">Gourmet</a>
+      <a href="tours.html" class="nav-link">Tours</a>
     </div>
+  </div>
+</nav>
 
-    <!-- JAVASCRIPT XỬ LÝ CHUYỂN ĐỔI DỮ LIỆU ĐỘNG -->
-    <script>
-        const travelData = {
-            "1": {
-                time: " 1月の旅",
-                title: "ハザン — 桃の花咲く春の風物詩 (Hà Giang)",
-                jp: "【ハザン】年始はハザンの各集落で桃やスモモの花が咲き誇る最高の時期です。ベトナム北東部高地の澄んだ涼しい空気とともに絶景を楽しめます。",
-                img: "image/ha-giang-mua-nay-co-gi-b48986-1200x900.webp",
-                caption: "Sắc hoa xuân rực rỡ nơi cao nguyên đá"
-            },
-            "2": {
-                time: " 2月の旅",
-                title: "ニンビン — 新春を祝うお祭りシーズン (Ninh Bình)",
-                jp: "【ニンビン】2月は新春の旅に最適です。世界遺産のチャンアンやバイディン寺では、ベトナムの伝統적인春祭りの活気ある雰囲気を体験できます。",
-                img: "image/dia-diem-du-lich-ninh-binh-1_c95e3fbb5bee4484b6f39cadacd42349_grande.png",
-                caption: "Hòa mình vào thiên nhiên Tràng An xanh mướt"
-            },
-            "3": {
-                time: "3月の旅",
-                title: "テイグエン — 世界珈琲博物館 (Tây Nguyên)",
-                jp: "【世界珈琲博物館】ブアマチュオットにある、エデ族の伝統的な高床式住居（ニャーロン）を模した美しい建築が話題の博物館。テイグエン地方の文化を感じられる人気の映えスポットです。",
-                img: "image/bao-tang-the-gioi-ca-phe.jpg",
-                caption: "Mùa hoa cà phê phủ trắng núi đồi Tây Nguyên"
-            },
-            "4": {
-                time: "4月の旅",
-                title:"古都フエ — 歴史が息づく世界遺産の街 (Cố đô Huế)",
-                jp: "【フエ】4月は気候が穏やかで、古都フエの王宮散策に最適です。フォン川に架かるチャンティエン橋の景色や、繊細な宮廷料理を堪能できます。",
-                img: "image/hoangthanhhue.png",
-                caption: "Nét trầm mặc, cổ kính của Ngọ Môn Huế"
-            },
-            "5": {
-                time: " 5月の旅",
-                title:"ハロン湾 — 初夏の輝くエメラルドグリーンの海 (Vịnh Hạ Long)",
-                jp: "【ハロン湾】5月は本格的な夏の始まりで、海が青く穏やかになります。何千もの奇岩の間を豪華クルーズ船で巡る特別な体験がおすすめです。",
-                img: "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?q=80&w=800",
-                caption: "Kỳ quan thiên nhiên thế giới nhìn từ trên cao"
-            },
-            "6": {
-                time: "6月の旅",
-                title: "ダナン・バナヒルズ — 雲の中に浮かぶ神の手 (Bà Nà Hills)",
-                jp: "【バナヒルズ・ダナン】6月のイチオシ！標高1,400mにある中世ヨーロッパ風の避暑地。巨大な手が支える不思議な「ゴールデンブリッジ」は必見です。",
-                img: "image/danang.jpg",
-                caption: "Làng Pháp cổ kính & Cầu Vàng - バナヒルズ"
-            },
-            "7": {
-                time: "7月の旅",
-                title:"ニャチャン — 太陽が眩しい極上のビーチリゾート (Nha Trang)",
-                jp: "【ニャチャン】7月は太陽が眩しい絶好 Guild のビーチシーズン。サンゴ礁を見るダイビングや、離島でのアクティビティ、テーマパークが楽しめます。",
-                img: "image/nhatrang.jpg",
-                caption: "Bờ biển trong xanh trải dài của vịnh Nha Trang"
-            },
-            "8": {
-                time: " 8月の旅",
-                title: "フーコック島 — 夕日に染まる魅惑 của真珠の島 (Phú Quốc)",
-                jp: "【フーコック島】8月の夏の終わりに、高級リゾートでのんびり過ごすのはいかがでしょうか。美しいビーチで沈む夕日を眺める時間は格別です。",
-                img: "image/phuquoc (2).jpg",
-                caption: "Bãi cát trắng mịn màng bên làn nước ấm áp"
-            },
-            "9": {
-                time: "9月の旅",
-                title: "ムーカンチャイ — 黄金色に輝く壮大な棚田 (Mù Cang Chải)",
-                jp: "【ムーカンチャイ】9月は北西部が黄金色に染まる稲穂 của 収穫期です。山肌に広がる壮大な棚田の波は、圧倒されるほどの美しさです。",
-                img: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?q=80&w=800",
-                caption: "Thảm lúa vàng óng ả trải dài ngút ngàn"
-            },
-            "10": {
-                time: "10月の旅",
-                title: "ハノイ — ロマンチックな黄金色の秋の街並み (Hà Nội)",
-                jp: "【ハノイの秋】10月のハノイは最も美しい秋を迎えます。涼しい風が吹き、旧市街を散策しながら伝統菓子（コム）を味わうのが粋な過ごし方です。",
-                img: "image/mua_thu_ha_noi_14.jpg",
-                caption: "Mùa thu lá vàng lãng mạn bên Hồ Hoàn Kiếm"
-            },
-            "11": {
-                time: " 11月の旅",
-                title: "ホイアン — ランタンが灯るノスタルジックな古都 (Hội An)",
-                jp: "【ホイアン】11月は心地よい気候になり、夜になると古い街並みがランタンの温かい光で幻想的に包まれます。ノスタルジーを感じる旅へ。",
-                img: "image/chua cau hoi an.jpg",
-                caption: "Vẻ đẹp lung linh của phố cổ Hội An về đêm"
-            },
-            "12": {
-                time: "12月の旅",
-                title: "ムイネー — 風と太陽が織りなす神秘的な砂丘 (Mũi Né)",
-                jp: "【ムイネー】12月はカイトサーフィンのベストシーズンです。まるでサハラ砂漠のような広大な白い砂丘（ホワイトサデューン）の絶景が広がります。",
-                img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=800",
-                caption: "Những đồi cát uốn lượn độc đáo tại Mũi Né"
-            }
-        };
+<div id="sidebar"></div>
 
-        const buttons = document.querySelectorAll('.month-btn');
-        const targetTime = document.getElementById('target-time');
-        const targetTitle = document.getElementById('target-title');
-        const targetJp = document.getElementById('target-jp');
-        const targetImg = document.getElementById('target-img');
-        const targetCaption = document.getElementById('target-caption');
-        const displayContainer = document.getElementById('display-container');
+<div id="hero">
+  <img id="hero-img" src="" alt="" />
+  <div class="hero-overlay-t"></div>
+  <div class="hero-overlay-l"></div>
+  <div id="roman"></div>
+  <div id="content">
+    <div class="pill">
+      <span class="pill-coords" id="coords"></span>
+      <span class="pill-sep"></span>
+      <span class="pill-weather" id="weather"></span>
+    </div>
+    <p class="time-label" id="time"></p>
+    <h1 class="hero-title" id="titleJp"></h1>
+    <p class="hero-title-vi" id="titleVi"></p>
+    <div class="glass-card">
+      <p id="descJp"></p>
+      <div class="glass-card-footer">
+        <span class="glass-card-elev" id="elevation"></span>
+        <span class="glass-card-sep"></span>
+        <span class="glass-card-cap" id="captionVi"></span>
+      </div>
+    </div>
+  </div>
+</div>
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                buttons.forEach(btn => btn.classList.remove('active-month'));
-                this.classList.add('active-month');
+<div id="gallery-wrap">
+  <div class="gallery-inner">
+    <button class="gallery-arrow gallery-arrow-left" onclick="galleryScroll(-1)">‹</button>
+    <div class="gallery-strip" id="galleryStrip"></div>
+    <button class="gallery-arrow gallery-arrow-right" onclick="galleryScroll(1)">›</button>
+  </div>
+</div>
 
-                const selectedMonth = this.getAttribute('data-month');
-                const data = travelData[selectedMonth];
+<div id="dial-wrap">
+  <div id="dial-menu"><div class="dial-grid" id="dialGrid"></div></div>
+  <button id="dial-toggle" onclick="toggleDial()">⊕</button>
+</div>
 
-                displayContainer.style.animation = 'none';
-                displayContainer.offsetHeight; 
-                displayContainer.style.animation = 'fadeIn 0.5s ease';
+<div id="lightbox" onclick="closeLightbox(event)">
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt="" />
+    <div class="lb-cap"><p id="lb-cap"></p></div>
+    <button class="lb-close" onclick="document.getElementById('lightbox').classList.remove('open')">✕</button>
+  </div>
+</div>
 
-                targetTime.innerText = data.time;
-                targetTitle.innerText = data.title;
-                targetJp.innerText = data.jp;
-                targetImg.setAttribute('src', data.img);
-                targetCaption.innerText = data.caption;
-            });
-        });
-    </script>
+<script src="data.js"></script>
+
+<script>
+// ── STATE ────────────────────────────────────────────
+let activeMonth = new Date().getMonth() + 1;
+let isAnimating = false; 
+let touchStartY = 0;
+let galleryIndex = 0;
+
+
+// ── DOM ELEMENTS ──────────────────────────────────────
+const sidebar = document.getElementById('sidebar');
+const dialGrid = document.getElementById('dialGrid');
+const galleryStrip = document.getElementById('galleryStrip');
+const contentPanel = document.getElementById('content');
+const heroImg = document.getElementById('hero-img');
+const romanWatermark = document.getElementById('roman');
+
+// Kiểm tra dữ liệu đầu vào từ data.js
+if (typeof travelData === 'undefined' || typeof galleryImages === 'undefined') {
+  console.error("LỖI: Không tìm thấy dữ liệu từ file data.js! Hãy chắc chắn bạn đã đặt file data.js chung thư mục với index.html.");
+}
+
+// ── RENDER UI COMPONENTS ──────────────────────────────
+function initUI() {
+  if (typeof travelData === 'undefined') return;
+
+  // Render Sidebar các tháng ở rìa trái
+  sidebar.innerHTML = travelData.map(item => `
+    <button class="month-btn ${item.month === activeMonth ? 'active' : ''}" data-month="${item.month}" onclick="selectMonth(${item.month})">
+      <div class="bar"></div>
+      <span>${item.monthLabel}</span>
+    </button>
+  `).join('');
+
+  // Render Dial Menu (vòng quay số) góc dưới phải
+  dialGrid.innerHTML = travelData.map(item => `
+    <button class="dial-btn ${item.month === activeMonth ? 'active' : ''}" data-month="${item.month}" onclick="selectMonth(${item.month}); toggleDial();">
+      <span class="dial-btn-roman">${item.romanNumeral}</span>
+      <span class="dial-btn-label">${item.monthLabel}</span>
+    </button>
+  `).join('');
+}
+
+function toggleDial() { 
+  const dialMenu = document.getElementById('dial-menu');
+  if (dialMenu) dialMenu.classList.toggle('open'); 
+}
+
+// ── CORE RENDER (CINEMATIC TRANSITION) ────────────────
+function render(month) {
+  if (typeof travelData === 'undefined') return;
+  
+  const d = travelData.find(x => x.month === month);
+  if (!d || isAnimating) return;
+
+  isAnimating = true;
+
+  // Bước 1: Hiệu ứng biến mất (Fade Out) đồng bộ mượt mà
+  if (contentPanel) contentPanel.classList.add('fade-out');
+  if (romanWatermark) romanWatermark.style.opacity = '0';
+  if (heroImg) {
+    heroImg.style.opacity = '0.2';
+    heroImg.style.transform = 'scale(1.05)';
+  }
+
+  // Bước 2: Cập nhật dữ liệu sau khi giao diện đã mờ hẳn (400ms)
+  setTimeout(() => {
+    if (heroImg) {
+      heroImg.src = d.img;
+      heroImg.alt = d.titleJp;
+    }
+    if (romanWatermark) romanWatermark.textContent = d.romanNumeral;
+    
+    // Đổ dữ liệu văn bản vào các thẻ tương ứng
+    const textElements = {
+      'coords': d.coords, 'weather': d.weather, 'time': d.time,
+      'titleJp': d.titleJp, 'titleVi': d.titleVi, 'descJp': d.descJp,
+      'elevation': d.elevation, 'captionVi': d.captionVi
+    };
+    
+    Object.keys(textElements).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = textElements[id];
+    });
+
+    // Render bộ Album ảnh chân trang sử dụng thuộc tính "img.cap"
+    const currentGallery = galleryImages[month] || [];
+    if (galleryStrip) {
+      galleryStrip.innerHTML = currentGallery.map((img, index) => `
+        <button class="gallery-thumb" onclick="openLightboxByIndex(${month}, ${index})">
+          <img src="${img.url}" alt="${img.cap || ''}" loading="lazy"/>
+          <div class="gallery-thumb-overlay"></div>
+          <span class="gallery-thumb-cap">${img.cap || ''}</span>
+        </button>
+      `).join('');
+    galleryStrip.scrollLeft = 0; 
+galleryStrip.style.transform = 'translateX(0)';
+galleryIndex = 0;
+    }
+
+    // Đồng bộ trạng thái .active cho menu điều hướng
+    document.querySelectorAll('.month-btn').forEach(b => b.classList.toggle('active', +b.dataset.month === month));
+    document.querySelectorAll('.dial-btn').forEach(b => b.classList.toggle('active', +b.dataset.month === month));
+
+    // Bước 3: Hiệu ứng hiển thị trở lại (Fade In)
+    if (heroImg) {
+      heroImg.onload = () => {
+        heroImg.style.opacity = '1';
+        heroImg.style.transform = 'scale(1)';
+      };
+      if (heroImg.complete) {
+        heroImg.style.opacity = '1';
+        heroImg.style.transform = 'scale(1)';
+      }
+    }
+
+    if (contentPanel) contentPanel.classList.remove('fade-out');
+    if (romanWatermark) romanWatermark.style.opacity = '0.12';
+
+    // Mở khóa cho lần tương tác tiếp theo
+    setTimeout(() => { isAnimating = false; }, 300);
+  }, 400);
+}
+
+function selectMonth(month) { 
+  activeMonth = month; 
+  render(month); 
+}
+
+function navigate(direction) {
+  if (isAnimating) return;
+  let targetMonth = activeMonth + direction;
+  if (targetMonth > 12) targetMonth = 1;
+  if (targetMonth < 1) targetMonth = 12;
+  selectMonth(targetMonth);
+}
+
+function galleryScroll(dir) {
+  const strip = document.getElementById('galleryStrip');
+  const thumbs = strip.querySelectorAll('.gallery-thumb');
+  if (!thumbs.length) return;
+
+  const maxIndex = thumbs.length - 1;
+  galleryIndex = Math.max(0, Math.min(maxIndex, galleryIndex + dir));
+
+  const offset = thumbs[galleryIndex].offsetLeft;
+  strip.style.transform = `translateX(-${offset}px)`;
+}
+
+// ── LIGHTBOX (PHÓNG TO ẢNH THƯ VIỆN) ──────────────────
+function openLightboxByIndex(month, index) {
+  const img = galleryImages[month]?.[index];
+  if (!img) return;
+  
+  const lbImg = document.getElementById('lb-img');
+  const lbCap = document.getElementById('lb-cap');
+  const lightbox = document.getElementById('lightbox');
+  
+  if (lbImg) lbImg.src = img.url;
+  if (lbCap) lbCap.textContent = img.cap || ''; 
+  if (lightbox) lightbox.classList.add('open');
+}
+
+function closeLightbox(e) { 
+  const lightbox = document.getElementById('lightbox');
+  if (!lightbox) return;
+  if (e.target === lightbox || e.target.classList.contains('lb-close')) {
+    lightbox.classList.remove('open'); 
+  }
+}
+
+// ── INTERACTION LISTENERS (KEYBOARD, WHEEL, TOUCH) ───
+document.addEventListener('keydown', e => {
+  if (['ArrowDown', 'ArrowRight'].includes(e.key)) { e.preventDefault(); navigate(1); }
+  else if (['ArrowUp', 'ArrowLeft'].includes(e.key)) { e.preventDefault(); navigate(-1); }
+  else if (e.key === 'Escape') { 
+    const lb = document.getElementById('lightbox');
+    const dm = document.getElementById('dial-menu');
+    if (lb) lb.classList.remove('open'); 
+    if (dm) dm.classList.remove('open'); 
+  }
+});
+
+window.addEventListener('wheel', e => {
+  if (Math.abs(e.deltaY) < 20) return; 
+  e.preventDefault(); 
+  navigate(e.deltaY > 0 ? 1 : -1);
+}, { passive: false });
+
+window.addEventListener('touchstart', e => { 
+  touchStartY = e.touches[0].clientY; 
+}, { passive: true });
+
+window.addEventListener('touchend', e => {
+  const touchEndY = e.changedTouches[0].clientY;
+  const diffY = touchStartY - touchEndY;
+  if (Math.abs(diffY) > 60) { 
+    navigate(diffY > 0 ? 1 : -1);
+  }
+}, { passive: true });
+
+// ── INIT APP ─────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  initUI();
+  render(activeMonth);
+});
+</script>
 </body>
 </html>
